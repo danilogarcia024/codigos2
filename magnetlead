@@ -1,0 +1,57 @@
+function emailOnFormSubmit(e) {
+
+	// Create as many variables as answers (columns in your spreadsheet) you require to send
+	var name = e.values[1];
+	var apellido = e.values[2];
+	var mail = e.values[5];
+	
+	// The subject of the email
+	var subject = "Email de confirmación magnetlead para " + name; 
+
+	// emailBody is for those devices that can't render HTML, is plain text
+	var emailBody = "Bienvenidos, su formulario fue recibido " + name 
+                        "\nCorreo Electrónico " + mail + 
+			              		"\n\nPuedes ver el taller en el siguiente enlace https://cutt.ly/EYO7iHk "; 
+	
+	// html is for those devices that can render HTML
+	// nowadays almost all devices can render HTML
+	var htmlBody =  "Estamos alegres que este aqui, su formulario fue enviado" 
+  					"<br/>Puedes ver el taller usando el enlace https://cutt.ly/EYO7iHk " +
+          "<br/><br/>Los datos que ingresó fueron los siguientes: " +
+					"<br/>Nombre: <font color=\"red\"><strong>" + name + "</strong></font>" +
+					"<br/>Correo Electrónico: " + mail +
+          "<br/>Si deseas contactarnos puedes responder este correo o hacerlo por este link https://linktr.ee/carlossotomolina ";
+
+	// More info for Advanced Options Parameters 
+	// https://developers.google.com/apps-script/reference/mail/mail-app#sendEmail(String,String,String,Object)
+	var advancedOpts = { name: "Formulario - magnetlead", htmlBody: htmlBody };
+  
+	// This instruction sends the email
+	MailApp.sendEmail(mail, subject, emailBody, advancedOpts);
+
+}
+
+function doGet(request) {
+  return HtmlService.createTemplateFromFile('Index').evaluate();
+  
+}
+
+function include(filename){
+  return HtmlService.createHtmlOutputFromFile(filename).getContent();
+}
+
+function processForm(formObject){
+  var url="https://docs.google.com/spreadsheets/d/1KQN6Eaqvod077-7lUHDyGAJ6giAZGwPeTnMDkOJrWT8/edit#gid=0";
+  var ss= SpreadsheetApp.openByUrl(url);
+  var ws=ss.getSheetByName("Datos");
+
+  ws.appendRow([
+    formObject.first_name,
+    formObject.last_name,
+    formObject.gender,
+    formObject.dateOfBirth,
+    formObject.email,
+    formObject.phone
+
+  ]);
+}
