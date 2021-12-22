@@ -1,7 +1,7 @@
 function emailOnFormSubmit(e) {
 
 	// Create as many variables as answers (columns in your spreadsheet) you require to send
-	var name = e.values[1];
+	var name = e.values[1]; // Carlos el problema esta aca, values es undefined
 	var apellido = e.values[2];
 	var mail = e.values[5];
 	
